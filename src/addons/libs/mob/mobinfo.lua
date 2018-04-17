@@ -20,12 +20,18 @@
 require 'common'
 require 'mob.mobparse'
 
+-- Get the proper install folder..
+local polVersion = AshitaCore:GetConfigurationManager():get_uint32("boot_config", "pol_version", 2);
+if (polVersion == 4) then
+    polVersion = 3;
+end
+
 ---------------------------------------------------------------------------------------------------
 -- desc: Mob Info Main Table
 ---------------------------------------------------------------------------------------------------
 local MobInfo =
 {
-    FFXiPath    = file.get_install_dir(0) .. '\\',
+    FFXiPath    = ashita.file.get_install_dir(polVersion, 1) .. '\\',
     MobList     = { },
     ZoneDatList = require('mob.zonemoblist'),
     ZoneId      = 0
@@ -80,8 +86,8 @@ end
 ---------------------------------------------------------------------------------------------------
 function __mobinfo_load()
     -- Parse the players current zone if we are in-game..
-    if (AshitaCore:GetDataManager():GetParty():GetPartyMemberActive(0)) then
-        local zoneId = AshitaCore:GetDataManager():GetParty():GetPartyMemberZone(0);
+    if (AshitaCore:GetDataManager():GetParty():GetMemberActive(0)) then
+        local zoneId = AshitaCore:GetDataManager():GetParty():GetMemberZone(0);
         UpdateZoneMobList(zoneId);
     end
 end
